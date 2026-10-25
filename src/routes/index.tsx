@@ -7,9 +7,16 @@ export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       { title: "Whispr — get honest anonymous messages" },
-      { name: "description", content: "Share your link, get anonymous messages from friends. Spam-limited, word filters and reporting built in." },
+      {
+        name: "description",
+        content:
+          "Share your link, get anonymous messages from friends. Spam-limited, word filters and reporting built in.",
+      },
       { property: "og:title", content: "Whispr — get honest anonymous messages" },
-      { property: "og:description", content: "Share your link, get anonymous messages from friends." },
+      {
+        property: "og:description",
+        content: "Share your link, get anonymous messages from friends.",
+      },
     ],
   }),
   component: Index,
@@ -17,8 +24,16 @@ export const Route = createFileRoute("/")({
 
 const features = [
   { icon: Link2, title: "Your own link", text: "Claim a username and share whispr link anywhere." },
-  { icon: Inbox, title: "Private inbox", text: "Read, archive or delete messages. Only you see them." },
-  { icon: ShieldCheck, title: "Safety first", text: "Rate limits, blocked words and one-tap reporting." },
+  {
+    icon: Inbox,
+    title: "Private inbox",
+    text: "Read, archive or delete messages. Only you see them.",
+  },
+  {
+    icon: ShieldCheck,
+    title: "Safety first",
+    text: "Rate limits, blocked words and one-tap reporting.",
+  },
 ];
 
 function Index() {
@@ -26,7 +41,9 @@ function Index() {
     <div className="mx-auto max-w-5xl px-6">
       <header className="flex items-center justify-between py-6">
         <Logo />
-        <Button asChild variant="ghost"><Link to="/auth">Sign in</Link></Button>
+        <Button asChild variant="ghost">
+          <Link to="/auth">Sign in</Link>
+        </Button>
       </header>
       <main className="py-20 text-center">
         <p className="mb-6 inline-block rounded-full border px-4 py-1 text-xs uppercase tracking-widest text-muted-foreground">

@@ -15,20 +15,27 @@ export const Route = createFileRoute("/u/$username")({
     return p;
   },
   head: ({ loaderData }) => {
-    const t = loaderData ? `Send @${loaderData.username} an anonymous message` : "Unavailable — Whispr";
+    const t = loaderData
+      ? `Send @${loaderData.username} an anonymous message`
+      : "Unavailable — Whispr";
     return {
       meta: [
         { title: t },
         { name: "description", content: loaderData?.prompt ?? "Anonymous messages on Whispr." },
         { property: "og:title", content: t },
-        { property: "og:description", content: loaderData?.prompt ?? "Anonymous messages on Whispr." },
+        {
+          property: "og:description",
+          content: loaderData?.prompt ?? "Anonymous messages on Whispr.",
+        },
       ],
     };
   },
   notFoundComponent: () => (
     <div className="flex min-h-screen flex-col items-center justify-center gap-4">
       <h1 className="text-3xl font-bold">No one here 👻</h1>
-      <Link to="/" className="text-primary">Get your own link</Link>
+      <Link to="/" className="text-primary">
+        Get your own link
+      </Link>
     </div>
   ),
   component: SendPage,
@@ -36,7 +43,10 @@ export const Route = createFileRoute("/u/$username")({
 
 function senderId() {
   let id = localStorage.getItem("whispr_sid");
-  if (!id) { id = crypto.randomUUID(); localStorage.setItem("whispr_sid", id); }
+  if (!id) {
+    id = crypto.randomUUID();
+    localStorage.setItem("whispr_sid", id);
+  }
   return id;
 }
 
@@ -50,9 +60,16 @@ function SendPage() {
     e.preventDefault();
     if (!text.trim()) return;
     setBusy(true);
-    const { error } = await supabase.rpc("send_message", { _username: p.username ?? "", _content: text, _sender: senderId() });
+    const { error } = await supabase.rpc("send_message", {
+      _username: p.username ?? "",
+      _content: text,
+      _sender: senderId(),
+    });
     setBusy(false);
-    if (error) { toast.error(error.message); return; }
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
     setText("");
     setDone(true);
   }
@@ -68,10 +85,16 @@ function SendPage() {
           {done ? (
             <div className="p-8 text-center">
               <h2 className="text-2xl font-bold">Sent! 🤫</h2>
-              <p className="mt-2 text-sm text-muted-foreground">Your message was delivered anonymously.</p>
+              <p className="mt-2 text-sm text-muted-foreground">
+                Your message was delivered anonymously.
+              </p>
               <div className="mt-6 flex flex-col gap-2">
-                <Button variant="outline" className="rounded-full" onClick={() => setDone(false)}>Send another</Button>
-                <Button asChild className="rounded-full font-semibold"><Link to="/auth">Get your own messages</Link></Button>
+                <Button variant="outline" className="rounded-full" onClick={() => setDone(false)}>
+                  Send another
+                </Button>
+                <Button asChild className="rounded-full font-semibold">
+                  <Link to="/auth">Get your own messages</Link>
+                </Button>
               </div>
             </div>
           ) : (
@@ -83,10 +106,17 @@ function SendPage() {
                 className="min-h-36 resize-none border-0 bg-muted text-base"
               />
               <div className="mt-2 flex items-center justify-between text-xs text-muted-foreground">
-                <span className="flex items-center gap-1"><Lock className="h-3 w-3" /> Anonymous to @{p.username}</span>
+                <span className="flex items-center gap-1">
+                  <Lock className="h-3 w-3" /> Anonymous to @{p.username}
+                </span>
                 <span>{text.length}/500</span>
               </div>
-              <Button type="submit" size="lg" className="glow mt-5 w-full rounded-full font-semibold" disabled={busy || !text.trim()}>
+              <Button
+                type="submit"
+                size="lg"
+                className="glow mt-5 w-full rounded-full font-semibold"
+                disabled={busy || !text.trim()}
+              >
                 Send anonymously
               </Button>
             </form>
@@ -95,7 +125,9 @@ function SendPage() {
         <p className="mt-6 text-center text-xs text-muted-foreground">
           Be kind. Abusive messages can be reported and traced by Whispr moderators.
         </p>
-        <div className="mt-6 flex justify-center"><Logo /></div>
+        <div className="mt-6 flex justify-center">
+          <Logo />
+        </div>
       </div>
     </div>
   );

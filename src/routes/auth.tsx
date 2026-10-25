@@ -12,7 +12,10 @@ export const Route = createFileRoute("/auth")({
   head: () => ({
     meta: [
       { title: "Sign in — Whispr" },
-      { name: "description", content: "Sign in or create your Whispr account to get your anonymous message link." },
+      {
+        name: "description",
+        content: "Sign in or create your Whispr account to get your anonymous message link.",
+      },
       { property: "og:title", content: "Sign in — Whispr" },
       { property: "og:description", content: "Create your anonymous message link." },
     ],
@@ -30,8 +33,12 @@ function AuthPage() {
   const [sent, setSent] = useState(false);
 
   useEffect(() => {
-    supabase.auth.getUser().then(({ data }) => { if (data.user) navigate({ to: "/inbox" }); });
-    const { data } = supabase.auth.onAuthStateChange((_e, s) => { if (s) navigate({ to: "/inbox" }); });
+    supabase.auth.getUser().then(({ data }) => {
+      if (data.user) navigate({ to: "/inbox" });
+    });
+    const { data } = supabase.auth.onAuthStateChange((_e, s) => {
+      if (s) navigate({ to: "/inbox" });
+    });
     return () => data.subscription.unsubscribe();
   }, [navigate]);
 
@@ -40,10 +47,15 @@ function AuthPage() {
     setBusy(true);
     try {
       if (mode === "up") {
-        if (!/^[a-zA-Z0-9_]{3,20}$/.test(username)) throw new Error("Username: 3–20 letters, numbers or _");
+        if (!/^[a-zA-Z0-9_]{3,20}$/.test(username))
+          throw new Error("Username: 3–20 letters, numbers or _");
         const { error } = await supabase.auth.signUp({
-          email, password,
-          options: { emailRedirectTo: window.location.origin + "/inbox", data: { username: username.toLowerCase() } },
+          email,
+          password,
+          options: {
+            emailRedirectTo: window.location.origin + "/inbox",
+            data: { username: username.toLowerCase() },
+          },
         });
         if (error) throw error;
         setSent(true);
@@ -59,7 +71,9 @@ function AuthPage() {
   }
 
   async function google() {
-    const r = await lovable.auth.signInWithOAuth("google", { redirect_uri: window.location.origin + "/auth" });
+    const r = await lovable.auth.signInWithOAuth("google", {
+      redirect_uri: window.location.origin + "/auth",
+    });
     if (r.error) toast.error(r.error.message);
   }
 
@@ -70,32 +84,60 @@ function AuthPage() {
         {sent ? (
           <div className="text-center">
             <h2 className="text-2xl font-bold">Check your email</h2>
-            <p className="mt-2 text-sm text-muted-foreground">Click the link we sent to {email} to activate your account.</p>
+            <p className="mt-2 text-sm text-muted-foreground">
+              Click the link we sent to {email} to activate your account.
+            </p>
           </div>
         ) : (
           <>
-            <h2 className="text-2xl font-bold">{mode === "up" ? "Claim your link" : "Welcome back"}</h2>
+            <h2 className="text-2xl font-bold">
+              {mode === "up" ? "Claim your link" : "Welcome back"}
+            </h2>
             <form onSubmit={submit} className="mt-6 space-y-4">
               {mode === "up" && (
                 <div className="space-y-1.5">
                   <Label htmlFor="u">Username</Label>
-                  <Input id="u" value={username} onChange={(e) => setUsername(e.target.value)} placeholder="yourname" required />
+                  <Input
+                    id="u"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    placeholder="yourname"
+                    required
+                  />
                 </div>
               )}
               <div className="space-y-1.5">
                 <Label htmlFor="e">Email</Label>
-                <Input id="e" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+                <Input
+                  id="e"
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                />
               </div>
               <div className="space-y-1.5">
                 <Label htmlFor="p">Password</Label>
-                <Input id="p" type="password" minLength={6} value={password} onChange={(e) => setPassword(e.target.value)} required />
+                <Input
+                  id="p"
+                  type="password"
+                  minLength={6}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                />
               </div>
               <Button type="submit" className="w-full rounded-full font-semibold" disabled={busy}>
                 {mode === "up" ? "Create account" : "Sign in"}
               </Button>
             </form>
-            <Button variant="outline" className="mt-3 w-full rounded-full" onClick={google}>Continue with Google</Button>
-            <button className="mt-6 w-full text-sm text-muted-foreground hover:text-foreground" onClick={() => setMode(mode === "up" ? "in" : "up")}>
+            <Button variant="outline" className="mt-3 w-full rounded-full" onClick={google}>
+              Continue with Google
+            </Button>
+            <button
+              className="mt-6 w-full text-sm text-muted-foreground hover:text-foreground"
+              onClick={() => setMode(mode === "up" ? "in" : "up")}
+            >
               {mode === "up" ? "Already have an account? Sign in" : "New here? Create an account"}
             </button>
           </>
