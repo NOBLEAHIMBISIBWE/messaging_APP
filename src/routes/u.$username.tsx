@@ -50,9 +50,9 @@ function SendPage() {
     e.preventDefault();
     if (!text.trim()) return;
     setBusy(true);
-    const { error } = await supabase.rpc("send_message", { _username: p.username, _content: text, _sender: senderId() });
+    const { error } = await supabase.rpc("send_message", { _username: p.username ?? "", _content: text, _sender: senderId() });
     setBusy(false);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     setText("");
     setDone(true);
   }

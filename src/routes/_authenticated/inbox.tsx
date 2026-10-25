@@ -53,13 +53,13 @@ function InboxPage() {
 
   async function update(id: string, patch: Partial<Msg>) {
     const { error } = await supabase.from("messages").update(patch).eq("id", id);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     if (patch.is_reported) toast.success("Reported. Thanks for keeping Whispr safe.");
     refresh();
   }
   async function remove(id: string) {
     const { error } = await supabase.from("messages").delete().eq("id", id);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     refresh();
   }
   async function share() {
@@ -145,7 +145,7 @@ function Settings({ userId, initial }: { userId: string; initial: { prompt: stri
   async function save() {
     const blocked_words = words.split(",").map((w) => w.trim().toLowerCase()).filter(Boolean);
     const { error } = await supabase.from("profiles").update({ prompt: prompt.slice(0, 120), blocked_words }).eq("id", userId);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     toast.success("Saved");
     qc.invalidateQueries({ queryKey: ["profile", userId] });
   }
