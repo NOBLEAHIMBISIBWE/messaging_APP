@@ -14,13 +14,91 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      messages: {
+        Row: {
+          content: string
+          created_at: string
+          id: string
+          is_archived: boolean
+          is_reported: boolean
+          receiver_id: string
+          sender_hash: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          id?: string
+          is_archived?: boolean
+          is_reported?: boolean
+          receiver_id: string
+          sender_hash: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          id?: string
+          is_archived?: boolean
+          is_reported?: boolean
+          receiver_id?: string
+          sender_hash?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "messages_receiver_id_fkey"
+            columns: ["receiver_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          blocked_words: string[]
+          created_at: string
+          id: string
+          prompt: string
+          username: string
+        }
+        Insert: {
+          blocked_words?: string[]
+          created_at?: string
+          id: string
+          prompt?: string
+          username: string
+        }
+        Update: {
+          blocked_words?: string[]
+          created_at?: string
+          id?: string
+          prompt?: string
+          username?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
-      [_ in never]: never
+      public_profiles: {
+        Row: {
+          prompt: string | null
+          username: string | null
+        }
+        Insert: {
+          prompt?: string | null
+          username?: string | null
+        }
+        Update: {
+          prompt?: string | null
+          username?: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
-      [_ in never]: never
+      send_message: {
+        Args: { _content: string; _sender: string; _username: string }
+        Returns: undefined
+      }
     }
     Enums: {
       [_ in never]: never
