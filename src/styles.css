@@ -60,18 +60,34 @@
 }
 
 @layer base {
-  * { border-color: var(--color-border); }
+  * {
+    border-color: var(--color-border);
+  }
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
     font-family: var(--font-sans);
     background-image:
-      radial-gradient(circle at 15% 10%, color-mix(in oklab, var(--accent) 18%, transparent), transparent 40%),
-      radial-gradient(circle at 85% 80%, color-mix(in oklab, var(--primary) 12%, transparent), transparent 45%);
+      radial-gradient(
+        circle at 15% 10%,
+        color-mix(in oklab, var(--accent) 18%, transparent),
+        transparent 40%
+      ),
+      radial-gradient(
+        circle at 85% 80%,
+        color-mix(in oklab, var(--primary) 12%, transparent),
+        transparent 45%
+      );
     background-attachment: fixed;
     min-height: 100vh;
   }
-  h1, h2, h3 { font-family: var(--font-display); }
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+  }
 }
 
-@utility glow { box-shadow: var(--glow); }
+@utility glow {
+  box-shadow: var(--glow);
+}
